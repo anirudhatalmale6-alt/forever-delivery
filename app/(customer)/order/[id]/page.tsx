@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { formatLKR, formatDate, getStatusColor, getStatusLabel } from '@/lib/utils';
@@ -30,8 +30,8 @@ interface Order {
   updated_at: string;
 }
 
-export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function OrderDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const searchParams = useSearchParams();
   const isSuccess = searchParams.get('success') === '1';
 

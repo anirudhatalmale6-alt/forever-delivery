@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/cart-context';
@@ -21,8 +21,8 @@ interface Product {
   stock_quantity: number;
 }
 
-export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function ProductPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const router = useRouter();
   const { addToCart } = useCart();
   const [product, setProduct] = useState<Product | null>(null);

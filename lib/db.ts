@@ -120,7 +120,7 @@ function initializeDb(database: Database.Database) {
   // Ensure settings exist
   const settingsCount = database.prepare('SELECT COUNT(*) as c FROM app_settings').get() as { c: number };
   if (settingsCount.c === 0) {
-    database.prepare(`INSERT INTO app_settings (store_name, delivery_fee, min_order_amount) VALUES ('Forever', 200.00, 500.00)`).run();
+    database.prepare(`INSERT INTO app_settings (store_name, delivery_fee, min_order_amount) VALUES ('Forever', 200.00, 0)`).run();
   }
 }
 
