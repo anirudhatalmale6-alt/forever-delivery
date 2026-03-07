@@ -5,13 +5,12 @@ import { useCart } from '@/lib/cart-context';
 import { formatLKR } from '@/lib/utils';
 
 const DELIVERY_FEE = 200;
-const MIN_ORDER = 500;
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, subtotal, itemCount } = useCart();
 
   const total = subtotal + DELIVERY_FEE;
-  const canCheckout = items.length > 0 && subtotal >= MIN_ORDER;
+  const canCheckout = items.length > 0;
 
   if (items.length === 0) {
     return (
@@ -111,13 +110,6 @@ export default function CartPage() {
           <span className="font-bold text-lg text-[#0D7377]">{formatLKR(total)}</span>
         </div>
       </div>
-
-      {/* Minimum order notice */}
-      {subtotal < MIN_ORDER && (
-        <div className="bg-amber-50 text-amber-700 text-xs text-center py-2.5 px-3 rounded-xl mb-4">
-          Minimum order amount is {formatLKR(MIN_ORDER)}. Add {formatLKR(MIN_ORDER - subtotal)} more.
-        </div>
-      )}
 
       {/* Checkout Button */}
       <Link
