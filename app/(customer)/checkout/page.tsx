@@ -21,8 +21,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, clearCart } = useCart();
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [pageReady, setPageReady] = useState(false);
 
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -35,28 +34,25 @@ export default function CheckoutPage() {
   const total = subtotal + DELIVERY_FEE;
 
   useEffect(() => {
-    checkAuth();
+    loadProfile();
   }, []);
 
-  async function checkAuth() {
+  async function loadProfile() {
     try {
       const res = await fetch('/api/auth/profile');
       if (res.ok) {
         const data = await res.json();
         const user: UserProfile = data.user;
         setProfile(user);
-        setIsLoggedIn(true);
         setFullName(user.full_name || '');
         setPhone(user.phone || '');
         setAddress(user.address || '');
         setCity(user.city || '');
-      } else {
-        setIsLoggedIn(false);
       }
     } catch {
-      setIsLoggedIn(false);
+      // Guest checkout — no profile to prefill
     } finally {
-      setAuthChecked(true);
+      setPageReady(true);
     }
   }
 
@@ -111,36 +107,11 @@ export default function CheckoutPage() {
   }
 
   // Loading
-  if (!authChecked) {
+  if (!pageReady) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-gray-400">
         <div className="w-8 h-8 border-3 border-[#0D7377] border-t-transparent rounded-full animate-spin mb-3" />
         <span className="text-sm">Loading...</span>
-      </div>
-    );
-  }
-
-  // Not logged in
-  if (!isLoggedIn) {
-    return (
-      <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
-        <span className="text-5xl mb-4">{'\u{1F512}'}</span>
-        <h2 className="font-bold text-lg text-gray-700 mb-2">Please Log In</h2>
-        <p className="text-sm text-gray-500 mb-6">
-          You need to be logged in to place an order.
-        </p>
-        <Link
-          href="/login"
-          className="bg-[#0D7377] text-white px-6 py-2.5 rounded-xl font-semibold text-sm shadow-lg shadow-[#0D7377]/20"
-        >
-          Log In
-        </Link>
-        <Link
-          href="/signup"
-          className="mt-3 text-sm text-[#0D7377] font-medium"
-        >
-          or create an account
-        </Link>
       </div>
     );
   }

@@ -48,12 +48,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getSessionUser();
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
-    }
+    // Guest checkout allowed — session is optional
 
     const body = await request.json();
     const {
@@ -192,7 +187,7 @@ export async function POST(request: NextRequest) {
     const transaction = db.transaction(() => {
       insertOrder.run(
         orderId,
-        session.userId,
+        session?.userId || null,
         orderNumber,
         subtotal,
         deliveryFee,

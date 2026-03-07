@@ -8,19 +8,13 @@ export async function GET(
 ) {
   try {
     const session = await getSessionUser();
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
-    }
 
     const { id } = await params;
     const db = getDb();
 
     const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(id) as {
       id: string;
-      user_id: string;
+      user_id: string | null;
       order_number: string;
       status: string;
       subtotal: number;
@@ -44,8 +38,9 @@ export async function GET(
       );
     }
 
-    // Regular users can only see their own orders
-    if (!session.isAdmin && order.user_id !== session.userId) {
+    // If logged in and not admin, only allow viewing own orders
+    // Guest orders (user_id is null) are accessible by order ID
+    if (session && !session.isAdmin && order.user_id && order.user_id !== session.userId) {
       return NextResponse.json(
         { error: 'Not authorized to view this order' },
         { status: 403 }
