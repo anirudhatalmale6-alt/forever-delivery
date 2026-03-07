@@ -99,9 +99,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="h-16 flex items-center justify-between px-5 border-b border-white/10">
           <Link href="/admin" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-[#D4A843] rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">F</span>
+              <span className="text-white font-bold text-sm">24</span>
             </div>
-            <span className="text-white font-bold text-lg">Forever Admin</span>
+            <span className="text-white font-bold text-lg">24seven Admin</span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -160,7 +160,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             <Menu className="w-5 h-5" />
           </button>
-          <div className="lg:hidden ml-3 font-semibold text-gray-800">Forever Admin</div>
+          <div className="lg:hidden ml-3 font-semibold text-gray-800">24seven Admin</div>
           <div className="hidden lg:flex items-center text-sm text-gray-500">
             {navItems.find((item) => isActive(item.href))?.label || 'Dashboard'}
           </div>

@@ -93,7 +93,7 @@ function initializeDb(database: Database.Database) {
 
     CREATE TABLE IF NOT EXISTS app_settings (
       id INTEGER PRIMARY KEY DEFAULT 1,
-      store_name TEXT DEFAULT 'Forever',
+      store_name TEXT DEFAULT '24seven',
       delivery_fee REAL DEFAULT 200.00,
       min_order_amount REAL DEFAULT 500.00,
       store_phone TEXT DEFAULT '',
@@ -114,13 +114,13 @@ function initializeDb(database: Database.Database) {
     const hash = bcrypt.hashSync('admin123', 10);
     database.prepare(
       `INSERT INTO users (id, email, password_hash, full_name, is_admin) VALUES (?, ?, ?, ?, 1)`
-    ).run(generateId(), 'admin@forever.lk', hash, 'Admin');
+    ).run(generateId(), 'admin@24seven.lk', hash, 'Admin');
   }
 
   // Ensure settings exist
   const settingsCount = database.prepare('SELECT COUNT(*) as c FROM app_settings').get() as { c: number };
   if (settingsCount.c === 0) {
-    database.prepare(`INSERT INTO app_settings (store_name, delivery_fee, min_order_amount) VALUES ('Forever', 200.00, 0)`).run();
+    database.prepare(`INSERT INTO app_settings (store_name, delivery_fee, min_order_amount) VALUES ('24seven', 200.00, 0)`).run();
   }
 }
 
@@ -188,11 +188,11 @@ function seedData(database: Database.Database) {
 
 export function generateOrderNumber(database: Database.Database): string {
   const result = database.prepare(
-    `SELECT order_number FROM orders WHERE order_number LIKE 'FRV-%' ORDER BY CAST(SUBSTR(order_number, 5) AS INTEGER) DESC LIMIT 1`
+    `SELECT order_number FROM orders WHERE order_number LIKE '24S-%' ORDER BY CAST(SUBSTR(order_number, 5) AS INTEGER) DESC LIMIT 1`
   ).get() as { order_number: string } | undefined;
 
   const nextNum = result ? parseInt(result.order_number.substring(4)) + 1 : 1;
-  return `FRV-${String(nextNum).padStart(4, '0')}`;
+  return `24S-${String(nextNum).padStart(4, '0')}`;
 }
 
 export { getDb, generateId };

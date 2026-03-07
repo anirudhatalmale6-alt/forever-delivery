@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Forever - Pharmacy & Liquor Delivery',
+  title: '24seven - Pharmacy & Liquor Delivery',
   description: 'Fast delivery of pharmacy essentials and liquor in Sri Lanka',
 };
 

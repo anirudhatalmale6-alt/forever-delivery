@@ -60,7 +60,7 @@ function Header() {
     <header className="fixed top-0 left-0 right-0 bg-[#0D7377] text-white z-50 shadow-md">
       <div className="max-w-[480px] mx-auto flex items-center justify-between px-4 h-14">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold tracking-wide">Forever</span>
+          <span className="text-xl font-bold tracking-wide">24seven</span>
         </Link>
         <span className="text-xs opacity-80">Delivery</span>
       </div>

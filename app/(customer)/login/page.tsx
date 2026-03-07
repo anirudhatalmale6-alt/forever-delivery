@@ -50,10 +50,10 @@ export default function LoginPage() {
       {/* Logo area */}
       <div className="text-center mb-8">
         <div className="w-16 h-16 bg-[#0D7377] rounded-2xl flex items-center justify-center mx-auto mb-3">
-          <span className="text-white font-bold text-2xl">F</span>
+          <span className="text-white font-bold text-xl">24</span>
         </div>
         <h1 className="font-bold text-xl text-gray-800">Welcome Back</h1>
-        <p className="text-sm text-gray-500 mt-1">Log in to your Forever account</p>
+        <p className="text-sm text-gray-500 mt-1">Log in to your 24seven account</p>
       </div>
 
       {error && (

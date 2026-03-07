@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl mb-4">
             <Lock className="w-8 h-8 text-[#D4A843]" />
           </div>
-          <h1 className="text-3xl font-bold text-white">Forever</h1>
+          <h1 className="text-3xl font-bold text-white">24seven</h1>
           <p className="text-white/60 mt-1 text-sm">Admin Panel</p>
         </div>
 
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@forever.lk"
+                  placeholder="admin@24seven.lk"
                   required
                   className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D7377] focus:border-transparent outline-none transition text-gray-800"
                 />
@@ -131,7 +131,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-white/40 text-xs mt-6">
-          Forever Delivery &mdash; Admin Portal
+          24seven Delivery &mdash; Admin Portal
         </p>
       </div>
     </div>
