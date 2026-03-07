@@ -1,0 +1,89 @@
+"use strict";(()=>{var e={};e.id=898,e.ids=[898],e.modules={2934:e=>{e.exports=require("next/dist/client/components/action-async-storage.external.js")},4580:e=>{e.exports=require("next/dist/client/components/request-async-storage.external.js")},5869:e=>{e.exports=require("next/dist/client/components/static-generation-async-storage.external.js")},399:e=>{e.exports=require("next/dist/compiled/next-server/app-page.runtime.prod.js")},517:e=>{e.exports=require("next/dist/compiled/next-server/app-route.runtime.prod.js")},8893:e=>{e.exports=require("buffer")},4770:e=>{e.exports=require("crypto")},5315:e=>{e.exports=require("path")},6162:e=>{e.exports=require("stream")},1764:e=>{e.exports=require("util")},6381:(e,r,t)=>{t.r(r),t.d(r,{originalPathname:()=>g,patchFetch:()=>N,requestAsyncStorage:()=>l,routeModule:()=>T,serverHooks:()=>L,staticGenerationAsyncStorage:()=>m});var i={};t.r(i),t.d(i,{DELETE:()=>E,GET:()=>c,PUT:()=>u});var s=t(9303),a=t(8716),n=t(670),o=t(7070),d=t(4603),p=t(9178);async function c(e,{params:r}){try{let{id:e}=await r,t=(0,d.zA)().prepare(`SELECT p.*, c.name as category_name, c.type as category_type
+       FROM products p
+       LEFT JOIN categories c ON p.category_id = c.id
+       WHERE p.id = ?`).get(e);if(!t)return o.NextResponse.json({error:"Product not found"},{status:404});return o.NextResponse.json({product:t})}catch(e){return console.error("Get product error:",e),o.NextResponse.json({error:"Internal server error"},{status:500})}}async function u(e,{params:r}){try{let t=await (0,p.xn)();if(!t)return o.NextResponse.json({error:"Not authenticated"},{status:401});if(!t.isAdmin)return o.NextResponse.json({error:"Admin access required"},{status:403});let{id:i}=await r,s=(0,d.zA)();if(!s.prepare("SELECT id FROM products WHERE id = ?").get(i))return o.NextResponse.json({error:"Product not found"},{status:404});let{category_id:a,name:n,description:c,price:u,image_url:E,sku:T,stock_quantity:l,is_active:m,requires_prescription:L,is_age_restricted:g,unit:N}=await e.json(),A=[],R=[];if(void 0!==a){if(!s.prepare("SELECT id FROM categories WHERE id = ?").get(a))return o.NextResponse.json({error:"Category not found"},{status:400});A.push("category_id = ?"),R.push(a)}if(void 0!==n&&(A.push("name = ?"),R.push(n.trim())),void 0!==c&&(A.push("description = ?"),R.push(c.trim())),void 0!==u){if("number"!=typeof u||u<0)return o.NextResponse.json({error:"Price must be a non-negative number"},{status:400});A.push("price = ?"),R.push(u)}if(void 0!==E&&(A.push("image_url = ?"),R.push(E.trim())),void 0!==T&&(A.push("sku = ?"),R.push(T.trim())),void 0!==l&&(A.push("stock_quantity = ?"),R.push(l)),void 0!==m&&(A.push("is_active = ?"),R.push(m?1:0)),void 0!==L&&(A.push("requires_prescription = ?"),R.push(L?1:0)),void 0!==g&&(A.push("is_age_restricted = ?"),R.push(g?1:0)),void 0!==N&&(A.push("unit = ?"),R.push(N.trim())),0===A.length)return o.NextResponse.json({error:"No fields to update"},{status:400});A.push("updated_at = datetime('now')"),R.push(i),s.prepare(`UPDATE products SET ${A.join(", ")} WHERE id = ?`).run(...R);let x=s.prepare(`SELECT p.*, c.name as category_name, c.type as category_type
+       FROM products p LEFT JOIN categories c ON p.category_id = c.id
+       WHERE p.id = ?`).get(i);return o.NextResponse.json({product:x})}catch(e){return console.error("Update product error:",e),o.NextResponse.json({error:"Internal server error"},{status:500})}}async function E(e,{params:r}){try{let e=await (0,p.xn)();if(!e)return o.NextResponse.json({error:"Not authenticated"},{status:401});if(!e.isAdmin)return o.NextResponse.json({error:"Admin access required"},{status:403});let{id:t}=await r,i=(0,d.zA)();if(!i.prepare("SELECT id FROM products WHERE id = ?").get(t))return o.NextResponse.json({error:"Product not found"},{status:404});return i.prepare("DELETE FROM products WHERE id = ?").run(t),o.NextResponse.json({message:"Product deleted successfully"})}catch(e){return console.error("Delete product error:",e),o.NextResponse.json({error:"Internal server error"},{status:500})}}let T=new s.AppRouteRouteModule({definition:{kind:a.x.APP_ROUTE,page:"/api/products/[id]/route",pathname:"/api/products/[id]",filename:"route",bundlePath:"app/api/products/[id]/route"},resolvedPagePath:"/var/lib/freelancer/projects/40282459/forever-app/app/api/products/[id]/route.ts",nextConfigOutput:"",userland:i}),{requestAsyncStorage:l,staticGenerationAsyncStorage:m,serverHooks:L}=T,g="/api/products/[id]/route";function N(){return(0,n.patchFetch)({serverHooks:L,staticGenerationAsyncStorage:m})}},9178:(e,r,t)=>{t.d(r,{fT:()=>o,xn:()=>d});var i=t(1482),s=t.n(i),a=t(1615);let n=process.env.JWT_SECRET||"forever-delivery-secret-key-2026";function o(e){return s().sign(e,n,{expiresIn:"7d"})}async function d(){let e=await (0,a.cookies)(),r=e.get("token")?.value;return r?function(e){try{return s().verify(e,n)}catch{return null}}(r):null}},4603:(e,r,t)=>{let i;t.d(r,{Ox:()=>u,m1:()=>E,zA:()=>c});let s=require("better-sqlite3");var a=t.n(s),n=t(5315),o=t.n(n),d=t(8691);let p=o().join(process.cwd(),"data","forever.db");function c(){return i||((i=new(a())(p)).pragma("journal_mode = WAL"),i.pragma("foreign_keys = ON"),function(e){if(e.exec(`
+    CREATE TABLE IF NOT EXISTS categories (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      description TEXT DEFAULT '',
+      type TEXT NOT NULL CHECK (type IN ('pharmacy', 'liquor')),
+      sort_order INTEGER DEFAULT 0,
+      is_active INTEGER DEFAULT 1,
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS products (
+      id TEXT PRIMARY KEY,
+      category_id TEXT NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      description TEXT DEFAULT '',
+      price REAL NOT NULL DEFAULT 0,
+      image_url TEXT DEFAULT '',
+      sku TEXT DEFAULT '',
+      stock_quantity INTEGER DEFAULT 0,
+      is_active INTEGER DEFAULT 1,
+      requires_prescription INTEGER DEFAULT 0,
+      is_age_restricted INTEGER DEFAULT 0,
+      unit TEXT DEFAULT 'piece',
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL UNIQUE,
+      password_hash TEXT NOT NULL,
+      full_name TEXT NOT NULL DEFAULT '',
+      phone TEXT DEFAULT '',
+      address TEXT DEFAULT '',
+      city TEXT DEFAULT '',
+      is_admin INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS orders (
+      id TEXT PRIMARY KEY,
+      user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+      order_number TEXT NOT NULL UNIQUE,
+      status TEXT NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'confirmed', 'preparing', 'out_for_delivery', 'delivered', 'cancelled')),
+      subtotal REAL NOT NULL DEFAULT 0,
+      delivery_fee REAL NOT NULL DEFAULT 0,
+      total REAL NOT NULL DEFAULT 0,
+      payment_method TEXT DEFAULT 'cod',
+      delivery_address TEXT NOT NULL,
+      delivery_city TEXT DEFAULT '',
+      customer_name TEXT NOT NULL,
+      customer_phone TEXT NOT NULL,
+      customer_email TEXT DEFAULT '',
+      notes TEXT DEFAULT '',
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS order_items (
+      id TEXT PRIMARY KEY,
+      order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+      product_id TEXT REFERENCES products(id) ON DELETE SET NULL,
+      product_name TEXT NOT NULL,
+      product_price REAL NOT NULL,
+      quantity INTEGER NOT NULL DEFAULT 1,
+      line_total REAL NOT NULL DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS app_settings (
+      id INTEGER PRIMARY KEY DEFAULT 1,
+      store_name TEXT DEFAULT 'Forever',
+      delivery_fee REAL DEFAULT 200.00,
+      min_order_amount REAL DEFAULT 500.00,
+      store_phone TEXT DEFAULT '',
+      store_address TEXT DEFAULT '',
+      is_store_open INTEGER DEFAULT 1
+    );
+  `),0===e.prepare("SELECT COUNT(*) as c FROM categories").get().c&&function(e){let r=[{id:u(),name:"Pain Relief",slug:"pain-relief",description:"Painkillers and anti-inflammatory medications",type:"pharmacy",sort_order:1},{id:u(),name:"Cold & Flu",slug:"cold-flu",description:"Cold, flu, and allergy medications",type:"pharmacy",sort_order:2},{id:u(),name:"Vitamins & Supplements",slug:"vitamins-supplements",description:"Daily vitamins and health supplements",type:"pharmacy",sort_order:3},{id:u(),name:"First Aid",slug:"first-aid",description:"Bandages, antiseptics, and first aid supplies",type:"pharmacy",sort_order:4},{id:u(),name:"Personal Care",slug:"personal-care",description:"Hygiene and personal care products",type:"pharmacy",sort_order:5},{id:u(),name:"Whiskey",slug:"whiskey",description:"Premium whiskey and bourbon selections",type:"liquor",sort_order:10},{id:u(),name:"Beer",slug:"beer",description:"Local and imported beers",type:"liquor",sort_order:11},{id:u(),name:"Wine",slug:"wine",description:"Red, white, and sparkling wines",type:"liquor",sort_order:12},{id:u(),name:"Arrack",slug:"arrack",description:"Traditional Sri Lankan arrack",type:"liquor",sort_order:13},{id:u(),name:"Spirits",slug:"spirits",description:"Vodka, rum, gin, and other spirits",type:"liquor",sort_order:14}],t=e.prepare("INSERT INTO categories (id, name, slug, description, type, sort_order) VALUES (?, ?, ?, ?, ?, ?)");for(let e of r)t.run(e.id,e.name,e.slug,e.description,e.type,e.sort_order);let i=new Map(r.map(e=>[e.slug,e.id])),s=e.prepare("INSERT INTO products (id, category_id, name, description, price, stock_quantity, unit, requires_prescription, is_age_restricted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");for(let e of[{cat:"pain-relief",name:"Panadol Extra 500mg (10 tablets)",desc:"Fast-acting pain relief tablets",price:120,stock:100,unit:"strip",rx:0,age:0},{cat:"pain-relief",name:"Ibuprofen 400mg (10 tablets)",desc:"Anti-inflammatory pain relief",price:85,stock:80,unit:"strip",rx:0,age:0},{cat:"pain-relief",name:"Diclofenac Gel 30g",desc:"Topical pain relief gel",price:350,stock:50,unit:"tube",rx:0,age:0},{cat:"cold-flu",name:"Actifed Syrup 100ml",desc:"Cold and allergy syrup",price:280,stock:60,unit:"bottle",rx:0,age:0},{cat:"cold-flu",name:"Strepsils Lozenges (8 pack)",desc:"Sore throat lozenges",price:180,stock:120,unit:"pack",rx:0,age:0},{cat:"vitamins-supplements",name:"Vitamin C 1000mg (30 tablets)",desc:"Daily immune support",price:450,stock:75,unit:"bottle",rx:0,age:0},{cat:"vitamins-supplements",name:"Centrum Multivitamin (30 tablets)",desc:"Complete daily multivitamin",price:1200,stock:40,unit:"bottle",rx:0,age:0},{cat:"first-aid",name:"Band-Aid Assorted (20 pack)",desc:"Adhesive bandages",price:250,stock:90,unit:"pack",rx:0,age:0},{cat:"first-aid",name:"Dettol Antiseptic 100ml",desc:"Antiseptic liquid",price:320,stock:70,unit:"bottle",rx:0,age:0},{cat:"personal-care",name:"Signal Toothpaste 120g",desc:"Cavity protection toothpaste",price:195,stock:100,unit:"tube",rx:0,age:0},{cat:"whiskey",name:"Johnnie Walker Red Label 750ml",desc:"Blended Scotch whisky",price:5500,stock:30,unit:"bottle",rx:0,age:1},{cat:"whiskey",name:"Jack Daniels 750ml",desc:"Tennessee whiskey",price:7200,stock:25,unit:"bottle",rx:0,age:1},{cat:"beer",name:"Lion Lager 625ml",desc:"Sri Lankas favorite lager",price:350,stock:200,unit:"bottle",rx:0,age:1},{cat:"beer",name:"Carlsberg 330ml (6 pack)",desc:"Premium Danish beer",price:1800,stock:80,unit:"pack",rx:0,age:1},{cat:"wine",name:"Carlo Rossi Red 750ml",desc:"California red wine",price:2800,stock:35,unit:"bottle",rx:0,age:1},{cat:"arrack",name:"DCSL VS Arrack 750ml",desc:"Premium coconut arrack",price:2200,stock:50,unit:"bottle",rx:0,age:1},{cat:"arrack",name:"Old Reserve Arrack 375ml",desc:"Classic Sri Lankan arrack",price:850,stock:100,unit:"bottle",rx:0,age:1},{cat:"spirits",name:"Smirnoff Vodka 750ml",desc:"Triple-distilled vodka",price:3800,stock:40,unit:"bottle",rx:0,age:1},{cat:"spirits",name:"Bacardi White Rum 750ml",desc:"Premium white rum",price:4200,stock:35,unit:"bottle",rx:0,age:1},{cat:"spirits",name:"Gordons Gin 750ml",desc:"London dry gin",price:4500,stock:30,unit:"bottle",rx:0,age:1}])s.run(u(),i.get(e.cat),e.name,e.desc,e.price,e.stock,e.unit,e.rx,e.age)}(e),0===e.prepare("SELECT COUNT(*) as c FROM users WHERE is_admin = 1").get().c){let r=d.ZP.hashSync("admin123",10);e.prepare("INSERT INTO users (id, email, password_hash, full_name, is_admin) VALUES (?, ?, ?, ?, 1)").run(u(),"admin@forever.lk",r,"Admin")}0===e.prepare("SELECT COUNT(*) as c FROM app_settings").get().c&&e.prepare("INSERT INTO app_settings (store_name, delivery_fee, min_order_amount) VALUES ('Forever', 200.00, 500.00)").run()}(i)),i}function u(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,e=>{let r=16*Math.random()|0;return("x"===e?r:3&r|8).toString(16)})}function E(e){let r=e.prepare("SELECT order_number FROM orders WHERE order_number LIKE 'FRV-%' ORDER BY CAST(SUBSTR(order_number, 5) AS INTEGER) DESC LIMIT 1").get(),t=r?parseInt(r.order_number.substring(4))+1:1;return`FRV-${String(t).padStart(4,"0")}`}}};var r=require("../../../../webpack-runtime.js");r.C(e);var t=e=>r(r.s=e),i=r.X(0,[276,428],()=>t(6381));module.exports=i})();
