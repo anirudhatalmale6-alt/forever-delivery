@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/cart-context';
-import { formatLKR } from '@/lib/utils';
+import { formatLKR, TYPE_CONFIG } from '@/lib/utils';
 
 interface Product {
   id: string;
@@ -15,7 +15,7 @@ interface Product {
   image_url: string;
   category_id: string;
   category_name: string;
-  category_type: 'pharmacy' | 'liquor';
+  category_type: string;
   requires_prescription: number;
   is_age_restricted: number;
   stock_quantity: number;
@@ -89,9 +89,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     );
   }
 
-  const isPharmacy = product.category_type === 'pharmacy';
-  const bgColor = isPharmacy ? 'bg-teal-50' : 'bg-amber-50';
-  const textColor = isPharmacy ? 'text-[#0D7377]' : 'text-[#D4A843]';
+  const cfg = TYPE_CONFIG[product.category_type] || TYPE_CONFIG.pharmacy;
+  const bgColor = cfg.bgLight;
+  const textColor = cfg.textLight;
   const outOfStock = product.stock_quantity <= 0;
 
   return (
@@ -139,9 +139,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         <div className="flex items-start justify-between gap-3 mb-1">
           <h1 className="font-bold text-xl text-gray-800">{product.name}</h1>
           <span
-            className={`text-[10px] font-medium px-2 py-1 rounded-full shrink-0 mt-1 ${
-              isPharmacy ? 'bg-teal-50 text-[#0D7377]' : 'bg-amber-50 text-[#D4A843]'
-            }`}
+            className={`text-[10px] font-medium px-2 py-1 rounded-full shrink-0 mt-1 ${cfg.bgLight} ${cfg.textLight}`}
           >
             {product.category_name}
           </span>

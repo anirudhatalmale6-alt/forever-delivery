@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
-import { formatLKR } from '@/lib/utils';
+import { formatLKR, TYPE_CONFIG } from '@/lib/utils';
 
 interface Category {
   id: string;
   name: string;
   slug: string;
   description: string;
-  type: 'pharmacy' | 'liquor';
+  type: string;
   product_count: number;
 }
 
@@ -21,7 +21,7 @@ interface Product {
   description: string;
   unit: string;
   image_url: string;
-  category_type: 'pharmacy' | 'liquor';
+  category_type: string;
   requires_prescription: number;
   is_age_restricted: number;
   stock_quantity: number;
@@ -95,12 +95,10 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
         {category && (
           <span
             className={`text-[10px] font-medium px-2 py-1 rounded-full shrink-0 ${
-              category.type === 'pharmacy'
-                ? 'bg-teal-50 text-[#0D7377]'
-                : 'bg-amber-50 text-[#D4A843]'
-            }`}
+              (TYPE_CONFIG[category.type] || TYPE_CONFIG.pharmacy).bgLight
+            } ${(TYPE_CONFIG[category.type] || TYPE_CONFIG.pharmacy).textLight}`}
           >
-            {category.type === 'pharmacy' ? 'Pharmacy' : 'Liquor'}
+            {(TYPE_CONFIG[category.type] || TYPE_CONFIG.pharmacy).label}
           </span>
         )}
       </div>
@@ -125,9 +123,9 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
       {!loading && products.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           {products.map((product) => {
-            const isPharmacy = product.category_type === 'pharmacy';
-            const bgColor = isPharmacy ? 'bg-teal-50' : 'bg-amber-50';
-            const textColor = isPharmacy ? 'text-[#0D7377]' : 'text-[#D4A843]';
+            const cfg = TYPE_CONFIG[product.category_type] || TYPE_CONFIG.pharmacy;
+            const bgColor = cfg.bgLight;
+            const textColor = cfg.textLight;
             const outOfStock = product.stock_quantity <= 0;
 
             return (
